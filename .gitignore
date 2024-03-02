@@ -3,6 +3,7 @@ ac-library
 .vscode
 **/contest.acc.json
 **/test
-**/.txt
+**/*.txt
 **/*.json
+**/*.out
 
