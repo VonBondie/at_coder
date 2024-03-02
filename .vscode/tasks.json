@@ -1,0 +1,73 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "create_debug_data",
+            "type": "shell",
+            "command": "find ${fileDirname}/test -name '*.in' | wc -l > ${fileDirname}/case_num.txt && cat ${fileDirname}/test/*.in > ${fileDirname}/merged_in.txt" 
+        },
+        {
+            "label": "atcoder_build",
+            "type": "shell",
+            "command": "/usr/bin/g++",
+            "args": [
+                "-std=gnu++17",
+                "-Wall",
+                "-Wextra",
+                "-I/opt/boost/gcc/include",
+                "-L/opt/boost/gcc/lib",
+                "-I${workspaceFolder}/ac-library",
+                "-g",
+                "-o",
+                "'${workspaceFolder}/problem.exe'",
+                "'${file}'",
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "dependsOn":[
+                "create_debug_data"
+            ]
+        },
+        {
+            "label": "build_for_test",
+            "type": "shell",
+            "command": "/usr/bin/g++",
+            "args": [
+                "-std=gnu++17",
+                "-Wall",
+                "-Wextra",
+                "-I/opt/boost/gcc/include",
+                "-L/opt/boost/gcc/lib",
+                "-I${workspaceFolder}/ac-library",
+                "-DONLINE_JUDGE",
+                "-g",
+                "-o",
+                "'${fileDirname}/a.out'",
+                "'${file}'"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": false 
+            }
+        },
+        {
+            "label": "test",
+            "type":"shell",
+            "command": "cd ${fileDirname}; oj t",
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            },
+            "dependsOn": [
+                "build_for_test"
+            ]
+        },
+        {
+            "label": "submit",
+            "type":"shell",
+            "command": "cd ${fileDirname}; acc s"
+        }
+    ]
+}

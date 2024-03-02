@@ -1,0 +1,5 @@
+*.exe
+ac-library
+**/contest.acc.json
+**/test
+**/.txt
