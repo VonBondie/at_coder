@@ -196,16 +196,70 @@ public:
 };
 ////////////////////////////////////////////////////
 
+struct train_info {
+  LL start; // l
+  LL span; // d
+  LL times; // k
+  LL duration; // c
+  LL src; // A
+  // LL dst; // B
+};
+
 void solve() {
   LL N, M;
   loadVar(N, M);
   VLL l(M), d(M), k(M), c(M), A(M), B(M);
   loadVec(M, l, d, k, c, A, B);
 
-  
+  vector<list<train_info>> T(N);
+  rep(i, M) {
+    LL dst = B[i]-1;
+    train_info info;
+    info.start = l[i];
+    info.span = d[i];
+    info.times = k[i];
+    info.duration = c[i];
+    info.src = A[i]-1;
+    T[dst].push_back(info);
+  }
 
+  VLL f(N);
+  f[N-1] = LONG_LONG_MAX;
+  priority_queue<pair<LL, LL>> q;
+  q.push(pair<LL, LL>(LONG_LONG_MAX, N-1));
 
-  cout << ans << endl;
+  while(!q.empty()) {
+    auto qe = q.top();
+    q.pop();
+    auto target = qe.second;
+    if(qe.first < f[target]) continue;
+
+    for(const auto& info: T[target]) {
+      if (f[target] < info.start + info.duration) continue; 
+      auto start = info.start + min(info.times - 1, (f[target] - info.start - info.duration) / info.span) * info.span;
+      if(start < f[info.src]) continue; 
+      f[info.src] = start;
+      q.push(pair<LL, LL>(f[info.src], info.src));
+      //   break;
+      // for(LL i = info.times-1; i >= 0; i--) {
+      //   LL start = info.start + info.span * i;
+      //   if(start < f[info.src]) break; 
+
+      //   LL arrive = start + info.duration;
+      //   if(arrive > f[target]) continue;
+
+      //   f[info.src] = start;
+      //   q.push(pair<LL, LL>(f[info.src], info.src));
+      //   break;
+      // }
+    }
+  }
+
+  rep(i, N-1) {
+    if(f[i] != 0) cout << f[i];
+    else cout << "Unreachable";
+    cout << endl;
+  }
 }
 
 int main(int argc, char *argv[]) {
@@ -214,7 +268,7 @@ int main(int argc, char *argv[]) {
 #else
   ifstream ifs("case_num.txt");
   int tmp = 1;
-  cin >> tmp;
+  ifs >> tmp;
   const int n_testcase = tmp;  // Don't change here!!
 #endif
 
