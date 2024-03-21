@@ -218,7 +218,10 @@ void solve() {
   Table.insert(pair<string,int>("", 0));
   rep(i, N) {
     vector<pair<string,int>> q;
+    // tableをループ内で書き換えるため、参照が必要な現時点のテーブルの中身を取り出しておく
     for(const auto& e: Table) q.push_back(e);
+
+    // テーブルの各要素に対して、文字列を加算し、Tの一部になり得るなら、テーブルに追加
     for(const auto& e: q){
       for(const auto& e2: S[i]) {
         string tmp_str = e.first + e2;

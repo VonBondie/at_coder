@@ -210,18 +210,25 @@ void solve() {
     }
     auto facts = prime_factor(A[i]);
     LL r = 1;
+    // 兵法になっていない成分を抜き出す
     for(auto& e : facts) {
       e.second %= 2;
       r *= pow(e.first, e.second);
     }
+    // 平方になっていない成分をインデックスとして個数を保持する辞書を作る
     T[r] += 1;
   }
 
+  // 平方数になりえる個数=Σ同じ非平方成分をもつ集合から2つ選ぶ方法 - ゼロによる補正
   LL ans = 0;
   for(const auto& e: T) {
+    // 同じ非平方成分をもつ組が存在しない場合は答えに影響しない
     if(e.second == 1) continue;
+    // 2Cn
     ans += e.second * (e.second - 1) / 2; 
   }
+  // 0による補正
+  // 0集団から2つ選択する組み合わせ + ゼロの集団から一つとそれ以外から一つ選ぶ組み合わせ
   if(zeros) ans += zeros *(zeros -1) /2 + zeros*(N - zeros);
 
   cout << ans << endl;
