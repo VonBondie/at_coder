@@ -95,6 +95,12 @@ void printVec(const T& v) {
   cout <<endl;
 }
 
+template <class T>
+vector<T> setToVector(const set<T>& s) {
+  vector<T> vec(s.begin(), s.end());
+  return vec;
+}
+
 template <typename T>
 T Ceil(T a,T b) {
   return (a + b - 1) / b;
@@ -190,46 +196,46 @@ public:
 };
 ////////////////////////////////////////////////////
 
+typedef atcoder::modint998244353 mint;
+
 void solve() {
-  int N; loadVar(N);
-  VS S(N);loadVec(N, S);
+  long long N;
+  loadVar(N);
+  VLL A(N);
+  loadVec(N, A);
 
-  int same = 0;
-  unordered_set<string> V;
+  mint ans = 0;
+  VI D(11);
+  VLL P10(11);
+  P10[0] = 1;
 
-  rep(i, N) {
-    string rev = S[i];
-    reverse(rev.begin(), rev.end());
-    if(rev == S[i] && V.find(S[i]) == V.end()) {
-      same++;
+  rep1(i, 10) P10[i] = P10[i-1] * 10;
+  rep1(i, N-1) {
+    ans += mint(A[i]) * (i);
+    D[to_string(A[i]).size()]++;
+  }
+  rep(i, N-1) {
+    for(int d=1; d<=10; d++) {
+      ans += mint(A[i]) * P10[d] * D[d];
     }
-    V.insert(S[i]);
-    V.insert(rev);
+    D[to_string(A[i+1]).size()]--;
   }
 
-  int ans = (V.size() - same) / 2 + same;
-
-  cout << ans << endl;
+  cout << ans.val() << endl;
 }
 
 int main(int argc, char *argv[]) {
 #ifdef ONLINE_JUDGE 
   const int n_testcase = 1;  // Don't change here!!
-  const bool flag_endl = false;
 #else
+  ifstream ifs(argv[1]);
   int tmp = 1;
-  bool flag_endl = false;
-  if(argc >= 2) {
-    ifstream ifs(argv[1]);
-    ifs >> tmp;
-    flag_endl = true;
-  }
+  ifs >> tmp;
   const int n_testcase = tmp;  // Don't change here!!
 #endif
 
   rep(i, n_testcase) {
     solve();
-    if(flag_endl)  cout << endl;
   }
 
   return 0;

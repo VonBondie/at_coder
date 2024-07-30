@@ -95,6 +95,12 @@ void printVec(const T& v) {
   cout <<endl;
 }
 
+template <class T>
+vector<T> setToVector(const set<T>& s) {
+  vector<T> vec(s.begin(), s.end());
+  return vec;
+}
+
 template <typename T>
 T Ceil(T a,T b) {
   return (a + b - 1) / b;
@@ -191,45 +197,31 @@ public:
 ////////////////////////////////////////////////////
 
 void solve() {
-  int N; loadVar(N);
-  VS S(N);loadVec(N, S);
+  LL N;
+  loadVar(N);
 
-  int same = 0;
-  unordered_set<string> V;
+  vector<unsigned long long> A(N), B(N);
+  loadVec(N, A, B);
 
-  rep(i, N) {
-    string rev = S[i];
-    reverse(rev.begin(), rev.end());
-    if(rev == S[i] && V.find(S[i]) == V.end()) {
-      same++;
-    }
-    V.insert(S[i]);
-    V.insert(rev);
-  }
-
-  int ans = (V.size() - same) / 2 + same;
-
+  unsigned long long sum = 0;
+  rep(i, N) sum += A[i];
+  unsigned long long ans = 0;
+  rep(i, N) ans = max(ans, sum+B[i]-A[i]);
   cout << ans << endl;
 }
 
 int main(int argc, char *argv[]) {
 #ifdef ONLINE_JUDGE 
   const int n_testcase = 1;  // Don't change here!!
-  const bool flag_endl = false;
 #else
+  ifstream ifs(argv[1]);
   int tmp = 1;
-  bool flag_endl = false;
-  if(argc >= 2) {
-    ifstream ifs(argv[1]);
-    ifs >> tmp;
-    flag_endl = true;
-  }
+  ifs >> tmp;
   const int n_testcase = tmp;  // Don't change here!!
 #endif
 
   rep(i, n_testcase) {
     solve();
-    if(flag_endl)  cout << endl;
   }
 
   return 0;

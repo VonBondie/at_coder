@@ -95,6 +95,12 @@ void printVec(const T& v) {
   cout <<endl;
 }
 
+template <class T>
+vector<T> setToVector(const set<T>& s) {
+  vector<T> vec(s.begin(), s.end());
+  return vec;
+}
+
 template <typename T>
 T Ceil(T a,T b) {
   return (a + b - 1) / b;
@@ -190,46 +196,57 @@ public:
 };
 ////////////////////////////////////////////////////
 
-void solve() {
-  int N; loadVar(N);
-  VS S(N);loadVec(N, S);
+struct Card {
+  int idx;
+  LL A;
+  LL C;
 
-  int same = 0;
-  unordered_set<string> V;
+  bool operator<(const  Card& obj) {
+    return A < obj.A;
+  }
+};
+
+void solve() {
+  int N;
+  loadVar(N);
+  vector<Card> cards(N);
 
   rep(i, N) {
-    string rev = S[i];
-    reverse(rev.begin(), rev.end());
-    if(rev == S[i] && V.find(S[i]) == V.end()) {
-      same++;
+    cards[i].idx = i+1;
+    cin >> cards[i].A;
+    cin >> cards[i].C;
+  }
+  std::sort(cards.begin(), cards.end());
+
+  set<int> answers;
+
+  LL c = LONG_LONG_MAX;
+  for(int i = N-1; i >=0; i--) {
+    if(cards[i].C < c) {
+      c = cards[i].C;
+      answers.insert(cards[i].idx);
     }
-    V.insert(S[i]);
-    V.insert(rev);
   }
 
-  int ans = (V.size() - same) / 2 + same;
+  cout << answers.size() << endl;
+  for(const auto elem: answers) {
+    cout << elem << " ";
+  }
 
-  cout << ans << endl;
 }
 
 int main(int argc, char *argv[]) {
 #ifdef ONLINE_JUDGE 
   const int n_testcase = 1;  // Don't change here!!
-  const bool flag_endl = false;
 #else
+  ifstream ifs(argv[1]);
   int tmp = 1;
-  bool flag_endl = false;
-  if(argc >= 2) {
-    ifstream ifs(argv[1]);
-    ifs >> tmp;
-    flag_endl = true;
-  }
+  ifs >> tmp;
   const int n_testcase = tmp;  // Don't change here!!
 #endif
 
   rep(i, n_testcase) {
     solve();
-    if(flag_endl)  cout << endl;
   }
 
   return 0;

@@ -4,7 +4,7 @@
         {
             "label": "create_debug_data",
             "type": "shell",
-            "command": "find ${fileDirname}/test -name '*.in' | wc -l > ${fileDirname}/case_num.txt && cat ${fileDirname}/test/*.in > ${fileDirname}/merged_in.txt" 
+            "command": "find ${fileDirname}/test -name '*.in' | wc -l > ${fileDirname}/case_num.txt && cat ${fileDirname}/test/*.in > ${fileDirname}/merged_in.txt"
         },
         {
             "label": "atcoder_build",
@@ -20,13 +20,13 @@
                 "-g",
                 "-o",
                 "'${workspaceFolder}/problem.exe'",
-                "'${file}'",
+                "'${file}'"
             ],
             "group": {
                 "kind": "build",
                 "isDefault": true
             },
-            "dependsOn":[
+            "dependsOn": [
                 "create_debug_data"
             ]
         },
@@ -49,12 +49,12 @@
             ],
             "group": {
                 "kind": "build",
-                "isDefault": false 
+                "isDefault": false
             }
         },
         {
             "label": "test",
-            "type":"shell",
+            "type": "shell",
             "command": "cd ${fileDirname}; oj t",
             "group": {
                 "kind": "test",
@@ -66,8 +66,9 @@
         },
         {
             "label": "submit",
-            "type":"shell",
-            "command": "cd ${fileDirname}; acc s"
+            "type": "shell",
+            "command": "cd ${fileDirname}; acc s",
+            "problemMatcher": []
         }
     ]
 }
