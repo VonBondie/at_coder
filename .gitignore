@@ -1,6 +1,5 @@
 *.exe
 ac-library
-.vscode
 **/contest.acc.json
 **/test
 **/*.txt

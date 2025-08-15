@@ -55,7 +55,7 @@
         {
             "label": "test",
             "type": "shell",
-            "command": "cd ${fileDirname}; oj t",
+            "command": "source ${workspaceFolder}/env/bin/activate.fish; cd ${fileDirname}; oj t",
             "group": {
                 "kind": "test",
                 "isDefault": true
